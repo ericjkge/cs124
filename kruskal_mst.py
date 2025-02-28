@@ -1,4 +1,8 @@
+#!/usr/bin/env python3
+
+import sys
 from graph_generator import Edge, Graph
+import csv
 
 
 # Disjoint set data structure
@@ -79,13 +83,37 @@ def calculate_average_weight(n, trials, d):
     return total_weight / trials
 
 
+def generate_plot_data(d, trials=100, output_file="final_results.csv"):
+    n_values = [128 * (2 ** i) for i in range(5)]
+    with open(output_file, 'w', newline='') as file:
+        writer = csv.writer(file)
+        for n in n_values:
+            avg_weight = calculate_average_weight(n, trials, d)
+            writer.writerow([n, avg_weight])    
+
 def main():
+    if len(sys.argv) != 5:
+        print("Usage: ./randmst 0 numpoints numtrials dimension")
+        sys.exit(1)
+
+    _, _, n, trials, d = sys.argv  # Ignore file name and flag (not used)
+
+    n = int(n)
+    trials = int(trials)
+    d = int(d)
+
+    average_weight = calculate_average_weight(n, trials, d)
+
+    """
     n = 100
     trials = 20000
     d = 0
+    """
+
     average_weight = calculate_average_weight(n, trials, d)
-    print(f"Average weight: {average_weight}")
+    print(f"{average_weight} {n} {trials} {d}")
 
 
 if __name__ == "__main__":
-    main()
+    generate_plot_data(0)
+    # main()
