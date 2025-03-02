@@ -7,11 +7,13 @@
 
 using namespace std;
 
+// Edge Constructor
 Edge::Edge(int src, int dest, double weight) : u(src), v(dest), w(weight) {}
 
+// Graph Constructor
 Graph::Graph(int numVertices, int dimension) : n(numVertices), d(dimension) {}
 
-// Create graph
+// Create Graph Function
 void Graph::createGraph() {
     if (d == 0) {
         create_0D();
@@ -29,7 +31,7 @@ void Graph::create_0D() {
 
     for (int i = 1; i < n; i++) {
         for (int j = 0; j < i; j++) {
-            double weight = dist(gen);  // Generate random weight
+            double weight = dist(gen);  // Generates a random weight
             edges.emplace_back(i, j, weight);
         }
     }
@@ -65,11 +67,16 @@ void Graph::create_234D() {
         }
     }
 
+    // Compute pruning threshold k(n)
+        double kn = 2.5 * pow(log(n) / n, 1.0 / d);
+
+
     // Compute Euclidean distance
     for (int i = 1; i < n; i++) {
         for (int j = 0; j < i; j++) {
             double weight = distance(vertices[i], vertices[j]);
-            edges.emplace_back(i, j, weight);
+            if(weight <= kn)
+                edges.emplace_back(i, j, weight);
         }
     }
 }
@@ -90,4 +97,3 @@ void printSampleEdges(Graph& graph, const string& label) {
     }
     cout << endl;
 }
-
