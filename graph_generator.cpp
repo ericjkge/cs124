@@ -7,13 +7,11 @@
 
 using namespace std;
 
-// Edge Constructor
 Edge::Edge(int src, int dest, double weight) : u(src), v(dest), w(weight) {}
 
-// Graph Constructor
 Graph::Graph(int numVertices, int dimension) : n(numVertices), d(dimension) {}
 
-// Create Graph Function
+// Create graph
 void Graph::createGraph() {
     if (d == 0) {
         create_0D();
@@ -31,7 +29,7 @@ void Graph::create_0D() {
 
     for (int i = 1; i < n; i++) {
         for (int j = 0; j < i; j++) {
-            double weight = dist(gen);  // Generates a random weight
+            double weight = dist(gen);  // Generate random weight
             edges.emplace_back(i, j, weight);
         }
     }

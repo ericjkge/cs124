@@ -10,7 +10,6 @@
 using namespace std;
 using namespace std::chrono;
 
-// Disjoint Set Data Structure
 class DisjointSet {
 public:
     vector<int> parent, rank;
@@ -45,36 +44,6 @@ public:
         }
     }
 };
-
-/*
-
-// Merge Sort Implementation
-vector<Edge> mergeSort(vector<Edge>& edges) {
-    if (edges.size() <= 1) return edges;
-    
-    int mid = edges.size() / 2;
-    vector<Edge> left(edges.begin(), edges.begin() + mid);
-    vector<Edge> right(edges.begin() + mid, edges.end());
-    
-    left = mergeSort(left);
-    right = mergeSort(right);
-    
-    vector<Edge> sorted;
-    size_t i = 0, j = 0;
-    while (i < left.size() && j < right.size()) {
-        if (left[i].w < right[j].w) {
-            sorted.push_back(left[i++]);
-        } else {
-            sorted.push_back(right[j++]);
-        }
-    }
-    while (i < left.size()) sorted.push_back(left[i++]);
-    while (j < right.size()) sorted.push_back(right[j++]);
-    
-    return sorted;
-}
-
-*/
 
 // Kruskal's Algorithm
 vector<Edge> kruskals(int n, vector<Edge>& edges) {
@@ -133,7 +102,7 @@ void generatePlotData(int d, int trials = 100) {
     
     for (int n : nValues) {
         auto start = high_resolution_clock::now();
-        int trials = 5; //set number of trials to 5
+        int trials = 5; //Set number of trials to 5
         double avgWeight = calculateAverageWeight(n, trials, d);
         auto end = high_resolution_clock::now();
         auto duration = duration_cast<milliseconds>(end - start).count();
@@ -144,7 +113,6 @@ void generatePlotData(int d, int trials = 100) {
     file.close();
 }
 
-// Main function
 int main(int argc, char* argv[]) {
     if (argc != 5) {
         cerr << "Usage: ./randmst 0 numpoints numtrials dimension" << endl;
@@ -162,9 +130,6 @@ int main(int argc, char* argv[]) {
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(end - start).count();
 
-    cout << averageWeight << " " << n << " " << trials << " " << d 
-         << ", Time: " << duration << " ms" << endl;
-    
-    generatePlotData(2);
+    cout << averageWeight << " " << n << " " << trials << " " << d << endl;
     return 0;
 }

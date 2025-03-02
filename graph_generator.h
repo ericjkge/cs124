@@ -29,4 +29,4 @@ private:
 
 void printSampleEdges(Graph& graph, const std::string& label);
 
-#endif // GRAPH_GENERATOR_H
+#endif

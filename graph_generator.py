@@ -27,7 +27,7 @@ class Graph:
     def create_0D(self):
         for i in range(1, self.n):
             for j in range(i):
-                weight = random.random()  # CHECK CHECK CHECK – range is [0, 1)
+                weight = random.random()
                 self.edges.append(Edge(i, j, weight))
 
     # Hypercube
