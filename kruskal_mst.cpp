@@ -4,9 +4,11 @@
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
+#include <chrono>
 #include "graph_generator.h"
 
 using namespace std;
+using namespace std::chrono;
 
 // Disjoint Set Data Structure
 class DisjointSet {
@@ -44,6 +46,8 @@ public:
     }
 };
 
+/*
+
 // Merge Sort Implementation
 vector<Edge> mergeSort(vector<Edge>& edges) {
     if (edges.size() <= 1) return edges;
@@ -70,9 +74,13 @@ vector<Edge> mergeSort(vector<Edge>& edges) {
     return sorted;
 }
 
+*/
+
 // Kruskal's Algorithm
 vector<Edge> kruskals(int n, vector<Edge>& edges) {
-    edges = mergeSort(edges);
+    sort(edges.begin(), edges.end(), [](const Edge &a, const Edge &b) {
+        return a.w < b.w; // Sort edges by weight in ascending order using built-in sort
+    });
     DisjointSet ds(n);
     vector<Edge> mst;
     
@@ -80,7 +88,7 @@ vector<Edge> kruskals(int n, vector<Edge>& edges) {
         if (ds.find(edge.u) != ds.find(edge.v)) {
             mst.push_back(edge);
             ds.unionSets(edge.u, edge.v);
-            if (mst.size() == n - 1) break;
+            if (static_cast<int>(mst.size()) == n - 1) break;
         }
     }
     return mst;
@@ -94,7 +102,7 @@ double calculateAverageWeight(int n, int trials, int d) {
         graph.createGraph();
         vector<Edge> edges = graph.edges; // Generate edges for a graph here based on n and d
         vector<Edge> mst = kruskals(n, edges);
-        if (mst.size() == n - 1) {
+        if (static_cast<int>(mst.size()) == n - 1) {
             for (const auto& edge : mst) {
                 totalWeight += edge.w;
             }
@@ -110,7 +118,7 @@ void generatePlotData(int d, int trials = 100) {
     if (d == 1) {
         nValues = {128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144};
     } else if (d == 0 || d == 2 || d == 3 || d == 4) {
-        nValues = { 4096, 8192, 16384, 32768};
+        nValues = {128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768};
     } else {
         cerr << "Invalid dimension value. Exiting function." << endl;
         return;
@@ -124,21 +132,14 @@ void generatePlotData(int d, int trials = 100) {
     }
     
     for (int n : nValues) {
-        int trials; //adjust number of trials based on graph size
-        if (d == 1) {
-            // Hypercube Graph
-            if (n <= 2048) trials = 100;
-            else if (n <= 65536) trials = 50;
-            else trials = 10;
-        } else {
-            // Complete Graphs
-            if (n <= 1024) trials = 100;
-            else if (n <= 16384) trials = 50;
-            else trials = 10;
-        }
+        auto start = high_resolution_clock::now();
+        int trials = 5; //set number of trials to 5
         double avgWeight = calculateAverageWeight(n, trials, d);
-        file << n << "," << avgWeight << "\n";
-        cout << n << "," << avgWeight << "\n";
+        auto end = high_resolution_clock::now();
+        auto duration = duration_cast<milliseconds>(end - start).count();
+
+        file << n << ", " << avgWeight << ", " << duration << "\n";
+        cout << n << ", " << avgWeight << ", Time: " << duration << " ms\n";
     }
     file.close();
 }
@@ -154,9 +155,16 @@ int main(int argc, char* argv[]) {
     int trials = atoi(argv[3]);
     int d = atoi(argv[4]);
     
+    auto start = high_resolution_clock::now();
+
     double averageWeight = calculateAverageWeight(n, trials, d);
-    cout << averageWeight << " " << n << " " << trials << " " << d << endl;
+
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(end - start).count();
+
+    cout << averageWeight << " " << n << " " << trials << " " << d 
+         << ", Time: " << duration << " ms" << endl;
     
-    generatePlotData(0);
+    generatePlotData(2);
     return 0;
 }

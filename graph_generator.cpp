@@ -58,7 +58,7 @@ void Graph::create_234D() {
     mt19937 gen(rd());
     uniform_real_distribution<double> dist(0.0, 1.0);
 
-    vector<vector<double>> vertices(n, vector<double>(d));
+    vector<vector<double> > vertices(n, vector<double>(d));
 
     // Generate random vertices
     for (int i = 0; i < n; i++) {

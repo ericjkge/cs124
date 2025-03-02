@@ -19,7 +19,7 @@ def create_plot(file):
     plt.show()
 
 def main():
-    csv_file = "final_results.csv"
+    csv_file = "final_results(d=0).csv"
     create_plot(csv_file)
 
 if __name__ == "__main__":
